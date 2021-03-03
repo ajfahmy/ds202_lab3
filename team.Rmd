@@ -1,0 +1,100 @@
+---
+title: "iteam"
+author: "Dana Thacker and Andrew Fahmy"
+date: "3/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+dat <- readxl::read_xls('GSS2.xls')
+library(ggplot2)
+library(tidyverse)
+```
+
+**Question 1**
+Find the average years of education for the respondents with each marital status. Arrange your output in a meaningful order and print. Describe any patterns you find.
+```{r}
+dat <- dat %>%
+  mutate(`Highest year of school completed` = as.numeric(`Highest year of school completed`))
+
+never <- dat[dat$`Marital status` == "Never married", ]
+married <- dat[dat$`Marital status` == "Married", ]
+divorced <- dat[dat$`Marital status` == "Divorced", ]
+
+
+```
+
+
+**Question 2**
+Create a single data frame containing records for the better educated respondents with each marital status. A “better educated” respondent is someone who has strictly more years of education than the average among those with the same marital status. Print the structure of the data frame.
+```{r}
+#Better educated for never and divorced is 14+ because the averages were between 13 and 14, and for married the average was not quite 13 so the better educated will be 13+
+
+betterNever <- never[never$`Highest year of school completed` >= 14, ]
+betterMarried <- married[married$`Highest year of school completed` >= 13, ]
+betterDivorced <- divorced[divorced$`Highest year of school completed` >= 14, ]
+
+betterEdu <- rbind(betterNever, betterMarried, betterDivorced)
+str(betterEdu)
+```
+
+
+**Question 3**
+How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.
+```{r}
+
+```
+
+
+**Question 4**
+Does party affiliation affect the relationship you found in the last question?
+```{r}
+
+```
+
+
+**Question 5**
+How is marital status related to the education of a respondent? What are possible reasons accounting for the patterns you see?
+```{r}
+ggplot(never, aes(x = `Highest year of school completed`)) + geom_bar() + ggtitle("Never Married Highest Education Level") + xlab("Highest Year of School Completed") + ylab("Count")
+
+ggplot(married, aes(x = `Highest year of school completed`)) + geom_bar() + ggtitle("Married Highest Education Level") + xlab("Highest Year of School Completed") + ylab("Count")
+
+ggplot(divorced, aes(x = `Highest year of school completed`)) + geom_bar() + ggtitle("Divorced Highest Education Level") + xlab("Highest Year of School Completed") + ylab("Count")
+```
+
+From each of the datasets, it is clear that most people have completed 12 years of school, so graduated high school and did not continue with education. However, those that have never been married have a greater number of people, proportionally, that continued education and completed 16 years of college. This most likely means that they went on to receive a bachelors degree at some university. A fair amount of never married individuals completed 14 years of school which would most likely mean they received an associates degree from a university. Some reasoning for the patterns are that never married individuals never got married or have not yet gotten married because they have been focusing on schooling and their career which would increase the number of years of education. On the flip side, married individuals could have gotten married and decided not to take on the financial burden of more education and stopped their education, or they were not planning on continuing their education past high school because they are not career oriented individuals and they simply wanted marriage and a family. 
+
+**Question 6**
+Explore two more interesting questions, and answer those questions using the GSS data.
+*Exploration 1*
+Exploring Relationship between Number of Children and General Happiness
+```{r}
+ggplot(never, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Number of children`, scales = "free")
+```
+
+Individuals who have 1-4 children have a higher rate of answering 'Not too happy' than 'Very happy.' Most responses were still 'Pretty happy' across all of the graphs. Individuals with 6 children were the most likely, proportionally, to answer 'Very happy.' There does seem to be a relationship with the number of children and general happiness because the individuals with no children are more likely to be very happy than not too happy, whereas, with the exception of 6 children, individuals with children are more likely to respond that they are not too happy than they are very happy.
+
+*Exploration 2*
+Exploring Relationship between Belief in Life After Death and General Happiness
+```{r}
+ggplot(dat, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Belief in life after death`, scales = "free")
+```
+
+We only looked at responses of "Yes" and "No" for this analysis. It appears that the most common response is still 'Pretty happy,' but proportionally it is more common for those who answered 'yes' to be very happy than for those who answered 'no' to be very happy. It is still more common to be very happy than not too happy for those who answered yes and no. 
+
+
+
+
+
+
+
+
+
+
+
+
