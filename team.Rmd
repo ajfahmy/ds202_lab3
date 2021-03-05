@@ -74,7 +74,7 @@ Explore two more interesting questions, and answer those questions using the GSS
 *Exploration 1*
 Exploring Relationship between Number of Children and General Happiness
 ```{r}
-ggplot(never, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Number of children`, scales = "free")
+ggplot(never, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Number of children`, scales = "free") + xlab("General Happiness") + ylab("Count") + ggtitle("General Happiness based on Number of Children")
 ```
 
 Individuals who have 1-4 children have a higher rate of answering 'Not too happy' than 'Very happy.' Most responses were still 'Pretty happy' across all of the graphs. Individuals with 6 children were the most likely, proportionally, to answer 'Very happy.' There does seem to be a relationship with the number of children and general happiness because the individuals with no children are more likely to be very happy than not too happy, whereas, with the exception of 6 children, individuals with children are more likely to respond that they are not too happy than they are very happy.
@@ -82,7 +82,7 @@ Individuals who have 1-4 children have a higher rate of answering 'Not too happy
 *Exploration 2*
 Exploring Relationship between Belief in Life After Death and General Happiness
 ```{r}
-ggplot(dat, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Belief in life after death`, scales = "free")
+ggplot(dat, aes(x = `General happiness`)) + geom_histogram(stat="count") + theme(axis.text.x = element_text(angle = 90)) + facet_wrap(~ `Belief in life after death`, scales = "free") + xlab("General Happiness") + ylab("Count") + ggtitle("General Happiness by Belief in Life After Death")
 ```
 
 We only looked at responses of "Yes" and "No" for this analysis. It appears that the most common response is still 'Pretty happy,' but proportionally it is more common for those who answered 'yes' to be very happy than for those who answered 'no' to be very happy. It is still more common to be very happy than not too happy for those who answered yes and no. 
