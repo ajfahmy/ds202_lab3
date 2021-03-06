@@ -1,5 +1,5 @@
 ---
-title: "iteam"
+title: "team.Rmd"
 author: "Dana Thacker and Andrew Fahmy"
 date: "3/5/2021"
 output: html_document
@@ -10,23 +10,29 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-dat <- readxl::read_xls('GSS2.xls')
+library(readxl)
 library(ggplot2)
 library(tidyverse)
+dat <- readxl::read_xls('GSS2.xls')
 ```
 
 **Question 1**
 Find the average years of education for the respondents with each marital status. Arrange your output in a meaningful order and print. Describe any patterns you find.
 ```{r}
-dat <- dat %>%
-  mutate(`Highest year of school completed` = as.numeric(`Highest year of school completed`))
+dat <- dat %>% mutate(`Highest year of school completed` = as.numeric(`Highest year of school completed`))
 
 never <- dat[dat$`Marital status` == "Never married", ]
 married <- dat[dat$`Marital status` == "Married", ]
 divorced <- dat[dat$`Marital status` == "Divorced", ]
 
-
+dat %>% group_by(`Marital status`) %>% summarise(Mean=mean(`Highest year of school completed`, na.rm=TRUE))
+count(filter(dat, `Marital status` == 'No answer'))
 ```
+As we can see from this table, The majority of people average around 13 years of education. The widowed and separated groups have a lower average of
+around 11. This lower average may be because people that are widowed or separated are generally older and they may not have had the same amount of
+access to education when they were younger. The group that had no answer had a much higher average of about 15 years of education but there are very
+few data points for this group so it is possible they are mostly outliers.
+
 
 
 **Question 2**
@@ -46,15 +52,23 @@ str(betterEdu)
 **Question 3**
 How is the happiness of a respondent related to his/her marriage status? Define that a person is happy if the response to question is “Very happy” or “Pretty happy”.
 ```{r}
-
+happy_people = dat %>% filter(`General happiness` == "Very happy" | `General happiness` == "Pretty happy")
+happy_people %>% count(`Marital status`)
+#unhappy_people = 
+ggplot(happy_people, aes(x=`Marital status`, fill=`General happiness`)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
 ```
+As we can see from the graph, most of the people tend to be pretty happy, with the very happy group varying from about 25% to ~40% in groups like
+married and no answer.
 
 
 **Question 4**
 Does party affiliation affect the relationship you found in the last question?
 ```{r}
-
+happy_people %>% count(`Political party affiliation`)
+#ggplot(happy_people, aes(x=`Political party affiliation`, fill=`General happiness`)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
+ggplot(happy_people, aes(x=`Political party affiliation`, fill=`General happiness`)) + geom_bar(position="fill") + facet_wrap(~`Marital status`) + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
 ```
+These graphs show that there is an impact on the happiness. The amount seems to vary depending on the marital status but for the most part the variance is low exept for a few graphs which are most likely becuase they have so few data points.
 
 
 **Question 5**

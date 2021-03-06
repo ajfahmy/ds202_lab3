@@ -1,0 +1,51 @@
+---
+title: 'Lab3.Rmd'
+author: "Andrew Fahmy"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+  library(dplyr)
+  library(ggplot2)
+  library(readxl)
+  #data <- readxl::read_xls("GSS.xls")
+  data <- readxl::read_xls("GSS2.xls")
+```
+
+
+```{r}
+  data = rename(data, year="Gss year for this respondent", id="Respondent id number", week_hours="Number of hours usually work a week", children="Number of children", marital_status="Marital status", max_school="Highest year of school completed", political_party="Political party affiliation", belief="Belief in life after death", happiness="General happiness", ballot="Ballot used for interview")
+  data = mutate(data, happiness=as.factor(happiness), belief=as.factor(belief), political_party=as.factor(political_party), max_school=as.numeric(max_school), children=as.numeric(children), marital_status=as.factor(marital_status), week_hours=as.numeric(week_hours), ballot=as.factor(ballot))
+```
+
+```{r}
+  ave = data %>% group_by(marital_status) %>% summarise(Mean=mean(max_school, na.rm=TRUE))
+  ave
+  data2 - data %>% filter(marital_status == ave$marital_status && max_school < ean)
+```
+
+
+
+```{r}
+  happy_people = data %>% filter(happiness == "Very happy" | happiness == "Pretty happy")
+  happy_people %>% count(marital_status)
+  #unhappy_people = 
+  ggplot(happy_people, aes(x=marital_status, fill=happiness)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
+```
+
+
+
+```{r}
+  happy_people %>% count(political_party)
+  ggplot(happy_people, aes(x=political_party, fill=happiness)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
+  ggplot(happy_people, aes(x=political_party, fill=marital_status)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
+```
+
+
+```{r}
+  ggplot(data, aes(x=max_school, fill=marital_status)) + geom_bar(position="fill") + theme(axis.text.x = element_text(angle = 90)) + ylab("Proportion")
+```
